@@ -1,2 +1,4 @@
+**/*.pyc
+
 shared/postgresql/pgdata
 !.gitkeep
