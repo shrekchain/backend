@@ -1,8 +1,13 @@
-import os, json
-
+import json
+import os
 # a massive hack to see if we're testing, in which case we use different settings
 import sys
+import environ
+import logging
 
+
+# now that setting are deep inside the file structure, we need to manually dig ourselves out
+APPS_DIR = environ.Path(__file__) - 3
 TESTING = "test" in sys.argv
 
 
@@ -75,19 +80,19 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = True
 
-# Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ""
-
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = ""
 
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-STATIC_URL = "/media/"
+# *********************** STATIC ***********************
+
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [str(APPS_DIR("static"))]
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = get_from_env("SECRET_KEY", "replaceme")
@@ -120,36 +125,30 @@ if get_from_env("HSTS", "0") == "1":
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-
 MIDDLEWARE = [
     # secure a bunch of things
     'django.middleware.security.SecurityMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
-
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = "urls"
 
-ROOT_PATH = os.path.dirname(__file__)
-
 TEMPLATES = [
     {
-
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'APP_DIRS': True,
         'DIRS': [
-            ROOT_PATH,
-            os.path.join(ROOT_PATH, 'templates'),
-            # os.path.join(ROOT_PATH, 'helios/templates'),  # covered by APP_DIRS:True
-            # os.path.join(ROOT_PATH, 'helios_auth/templates'),  # covered by APP_DIRS:True
-            # os.path.join(ROOT_PATH, 'server_ui/templates'),  # covered by APP_DIRS:True
+            str(APPS_DIR.path('templates'))
         ],
         'OPTIONS': {
-            'debug': DEBUG
+            'debug': DEBUG,
+            'loaders': [
+                "django.template.loaders.filesystem.Loader",
+                "django.template.loaders.app_directories.Loader",
+            ]
         }
     },
 ]
@@ -159,9 +158,11 @@ INSTALLED_APPS = (
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.sites",
-    "helios_auth",
-    "helios",
-    "server_ui",
+    "django.contrib.staticfiles",
+    "corsheaders",
+    "helios_auth.apps.HeliosAuthConfig",
+    "helios.apps.HeliosConfig",
+    "server_ui.apps.ServerUiConfig",
 )
 
 ##
@@ -169,11 +170,10 @@ INSTALLED_APPS = (
 ##
 
 
-MEDIA_ROOT = ROOT_PATH + "media/"
+MEDIA_ROOT = str(APPS_DIR.path('media'))
 
 # a relative path where voter upload files are stored
 VOTER_UPLOAD_REL_PATH = "voters/%Y/%m/%d"
-
 
 # Change your email settings
 DEFAULT_FROM_EMAIL = get_from_env("DEFAULT_FROM_EMAIL", "ben@adida.net")
@@ -271,11 +271,7 @@ EMAIL_USE_TLS = get_from_env("EMAIL_USE_TLS", "0") == "1"
 if get_from_env("EMAIL_USE_AWS", "0") == "1":
     EMAIL_BACKEND = "django_ses.SESBackend"
 
-# set up logging
-import logging
-
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
-
 
 # set up django-celery
 # BROKER_BACKEND = "kombu.transport.DatabaseTransport"
@@ -293,6 +289,7 @@ if ROLLBAR_ACCESS_TOKEN:
         "environment": "development" if DEBUG else "production",
     }
 
-
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_PRELOAD = True
+
+CORS_ORIGIN_ALLOW_ALL = True

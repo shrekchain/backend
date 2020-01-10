@@ -14,7 +14,6 @@ from .auth_systems import AUTH_SYSTEMS
 from django.urls import reverse
 
 
-
 class UserModelTests(unittest.TestCase):
 
     def setUp(self):
