@@ -1,11 +1,10 @@
 [tool.poetry]
-name = "helios-server"
+name = "helios"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "3.5"
 anyjson = "==0.3.3"
 bleach = "==1.4.1"
 boto = "==2.27.0"
@@ -30,7 +29,6 @@ unicodecsv = "==0.14.1"
 validate-email = "==1.3"
 webtest = "==2.0.18"
 
-[tool.poetry.dev-dependencies]
 
 [build-system]
 requires = ["poetry>=0.12"]

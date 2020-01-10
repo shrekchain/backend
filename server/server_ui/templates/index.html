@@ -85,7 +85,7 @@ More than <b>2,000,000 votes</b> have been cast using Helios.
 {% else %}
 <em>none yet</em>
 {% endif %}
-<div class="row right"><a class="tiny button" href="{% url elections@voted" %}">see all</a></div>
+<div class="row right"><a class="tiny button" href="{% url "elections@voted" %}">see all</a></div>
 <div class="row"></div>
 {% else %}
 {% if settings.SHOW_LOGIN_OPTIONS %}

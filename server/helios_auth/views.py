@@ -58,8 +58,8 @@ def index(request):
 
 def login_box_raw(request, return_url="/", auth_systems=None):
     """
-  a chunk of HTML that shows the various login options
-  """
+    a chunk of HTML that shows the various login options
+    """
     default_auth_system_obj = None
     if helios_auth.DEFAULT_AUTH_SYSTEM:
         default_auth_system_obj = AUTH_SYSTEMS[helios_auth.DEFAULT_AUTH_SYSTEM]
@@ -80,7 +80,7 @@ def login_box_raw(request, return_url="/", auth_systems=None):
 
     return render_template_raw(
         request,
-        "login_box",
+        "login_box.html",
         {
             "enabled_auth_systems": enabled_auth_systems,
             "return_url": return_url,

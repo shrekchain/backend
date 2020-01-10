@@ -5,15 +5,15 @@ ENV HOME=/home/django
 
 RUN apt-get update && apt-get install -yy build-essential
 
-# RUN pip install poetry==1.0.0
+RUN pip install poetry==1.0.2
 COPY ./server /app
 WORKDIR /app
 
 COPY docker/local/server/entrypoint.sh /entrypoint.sh
 COPY docker/local/server/start.sh /start.sh
 
-# RUN poetry update && poetry install
-RUN pip install -r requirements.txt
+RUN poetry config virtualenvs.create false
+RUN poetry update && poetry install
 
 RUN addgroup --system --gid $USER_ID django \
     && adduser --system --home $HOME --uid $USER_ID --ingroup django django
