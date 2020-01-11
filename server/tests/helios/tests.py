@@ -83,97 +83,96 @@ class ElectionModelTests(TestCase):
         self.setup_trustee()
         assert self.election.num_trustees == 1
 
-    # def test_add_voters_file(self):
-    #     election = self.election
-    #
-    #     with open("helios/fixtures/voter-file.csv") as file:
-    #         vf = models.VoterFile.objects.create(election = election, voter_file = File(file, "voter_file.css"))
-    #         vf.process()
-    #
-    #     # make sure that we stripped things correctly
-    #     voter = election.voter_set.get(voter_login_id='benadida5')
-    #     assert voter.voter_email == 'ben5@adida.net'
-    #     assert voter.voter_name == 'Ben5 Adida'
-    #
-    # def test_check_issues_before_freeze(self):
-    #     # should be three issues: no trustees, and no questions, and no voters
-    #     issues = self.election.issues_before_freeze
-    #     self.assertEquals(len(issues), 3)
-    #
-    #     self.setup_questions()
-    #
-    #     # should be two issues: no trustees, and no voters
-    #     issues = self.election.issues_before_freeze
-    #     self.assertEquals(len(issues), 2)
-    #
-    #     self.election.questions = None
-    #
-    #     self.setup_trustee()
-    #
-    #     # should be two issues: no questions, and no voters
-    #     issues = self.election.issues_before_freeze
-    #     self.assertEquals(len(issues), 2)
-    #
-    #     self.setup_questions()
-    #
-    #     # move to open reg
-    #     self.setup_openreg()
-    #
-    #     issues = self.election.issues_before_freeze
-    #     self.assertEquals(len(issues), 0)
-    #
-    # def test_helios_trustee(self):
-    #     self.election.generate_trustee(views.ELGAMAL_PARAMS)
-    #
-    #     self.assertTrue(self.election.has_helios_trustee())
-    #
-    #     trustee = self.election.get_helios_trustee()
-    #     self.assertNotEquals(trustee, None)
-    #
-    # def test_log(self):
-    #     LOGS = ["testing 1", "testing 2", "testing 3"]
-    #
-    #     for l in LOGS:
-    #         self.election.append_log(l)
-    #
-    #     pulled_logs = [l.log for l in self.election.get_log().all()]
-    #     pulled_logs.reverse()
-    #
-    #     self.assertEquals(LOGS,pulled_logs)
-    #
-    # def test_eligibility(self):
-    #     self.election.eligibility = [{'auth_system': self.user.user_type}]
-    #
-    #     # without openreg, this should be false
-    #     self.assertFalse(self.election.user_eligible_p(self.user))
-    #
-    #     # what about after saving?
-    #     self.election.save()
-    #     e = models.Election.objects.get(uuid = self.election.uuid)
-    #     self.assertEquals(e.eligibility, [{'auth_system': self.user.user_type}])
-    #
-    #     self.election.openreg = True
-    #
-    #     # without openreg, and now true
-    #     self.assertTrue(self.election.user_eligible_p(self.user))
-    #
-    #     # try getting pretty eligibility, make sure it doesn't throw an exception
-    #     assert self.user.user_type in self.election.pretty_eligibility
-    #
-    # def test_freeze(self):
-    #     # freezing without trustees and questions, no good
-    #     def try_freeze():
-    #         self.election.freeze()
-    #     self.assertRaises(Exception, try_freeze)
-    #
-    #     self.setup_questions()
-    #     self.setup_trustee()
-    #     self.setup_openreg()
-    #
-    #     # this time it should work
-    #     try_freeze()
-    #
-    #     # make sure it logged something
+    def test_add_voters_file(self):
+        election = self.election
+
+        with open("helios/fixtures/voter-file.csv") as file:
+            vf = models.VoterFile.objects.create(election=election, voter_file=File(file, "voter_file.css"))
+            vf.process()
+
+        # make sure that we stripped things correctly
+        voter = election.voter_set.get(voter_login_id='benadida5')
+        assert voter.voter_email == 'ben5@adida.net'
+        assert voter.voter_name == 'Ben5 Adida'
+
+    def test_check_issues_before_freeze(self):
+        # should be three issues: no trustees, and no questions, and no voters
+        issues = self.election.issues_before_freeze
+        assert len(issues) == 3
+
+        self.setup_questions()
+
+        # should be two issues: no trustees, and no voters
+        issues = self.election.issues_before_freeze
+        assert len(issues) == 2
+
+        self.election.questions = None
+
+        self.setup_trustee()
+
+        # should be two issues: no questions, and no voters
+        issues = self.election.issues_before_freeze
+        assert len(issues) == 2
+
+        self.setup_questions()
+
+        # move to open reg
+        self.setup_openreg()
+
+        issues = self.election.issues_before_freeze
+        assert not len(issues)
+
+    def test_helios_trustee(self):
+        self.election.generate_trustee(views.ELGAMAL_PARAMS)
+
+        assert self.election.has_helios_trustee()
+
+        trustee = self.election.get_helios_trustee()
+        assert trustee is not None
+
+    def test_log(self):
+        LOGS = ["testing 1", "testing 2", "testing 3"]
+
+        for log in LOGS:
+            self.election.append_log(log)
+
+        pulled_logs = [l.log for l in self.election.get_log().all()]
+
+        assert LOGS == list(reversed(pulled_logs))
+
+    def test_eligibility(self):
+        self.election.eligibility = [{'auth_system': self.user.user_type}]
+
+        # without openreg, this should be false
+        assert not self.election.user_eligible_p(self.user)
+
+        # what about after saving?
+        self.election.save()
+        e = models.Election.objects.get(uuid = self.election.uuid)
+        assert e.eligibility == [{'auth_system': self.user.user_type}]
+
+        self.election.openreg = True
+
+        # without openreg, and now true
+        assert self.election.user_eligible_p(self.user)
+
+        # try getting pretty eligibility, make sure it doesn't throw an exception
+        assert self.user.user_type in self.election.pretty_eligibility
+
+    def test_freeze(self):
+        # freezing without trustees and questions, no good
+
+        with pytest.raises(Exception):
+            self.election.freeze()
+
+        self.setup_questions()
+        self.setup_trustee()
+        self.setup_openreg()
+
+        # this time it should work
+        self.election.freeze()
+
+        # make sure it logged something
     #     self.assertTrue(len(self.election.get_log().all()) > 0)
     #
     # def test_archive(self):
