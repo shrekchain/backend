@@ -51,7 +51,7 @@ def getRandomNumber(N, randfunc):
     odd_bits = N % 8
     if odd_bits != 0:
         char = ord(randfunc(1)) >> (8 - odd_bits)
-        S = chr(char).encode() + S
+        S = bytes([char]) + S
     value = bytes_to_long(S)
     value |= 2 ** (N - 1)  # Ensure high bit is set
     assert size(value) >= N
