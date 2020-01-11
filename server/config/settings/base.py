@@ -88,29 +88,27 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 MIDDLEWARE = [
     # secure a bunch of things
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
 ]
 
 ROOT_URLCONF = "urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            str(APPS_DIR.path('templates'))
-        ],
-        'OPTIONS': {
-            'debug': DEBUG,
-            'loaders': [
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [str(APPS_DIR.path("templates"))],
+        "OPTIONS": {
+            "debug": DEBUG,
+            "loaders": [
                 "django.template.loaders.filesystem.Loader",
                 "django.template.loaders.app_directories.Loader",
-            ]
-        }
+            ],
+        },
     },
 ]
 
@@ -131,7 +129,7 @@ INSTALLED_APPS = (
 ##
 
 
-MEDIA_ROOT = str(APPS_DIR.path('media'))
+MEDIA_ROOT = str(APPS_DIR.path("media"))
 
 # a relative path where voter upload files are stored
 VOTER_UPLOAD_REL_PATH = "voters/%Y/%m/%d"
@@ -143,6 +141,9 @@ SERVER_EMAIL = "%s <%s>" % (DEFAULT_FROM_NAME, DEFAULT_FROM_EMAIL)
 
 LOGIN_URL = "/auth/"
 LOGOUT_ON_CONFIRMATION = True
+
+
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 # The two hosts are here so the main site can be over plain HTTP
 # while the voting URLs are served over SSL.
@@ -237,7 +238,7 @@ logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(mes
 # set up django-celery
 # BROKER_BACKEND = "kombu.transport.DatabaseTransport"
 
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = "amqp://localhost"
 CELERY_TASKS_ALWAYS_EAGER = True
 
 SECURE_HSTS_SECONDS = 31536000
