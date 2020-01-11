@@ -12,9 +12,9 @@ services:
     ports:
       - 5432:5432
     networks:
-      - sherlock-network
+      - helios-network
 
-  app:
+  app: &app
     container_name: helios-backend
     build:
       context: .
@@ -29,10 +29,24 @@ services:
     ports:
       - 8000:8000
     networks:
-      - sherlock-network
+      - helios-network
     stdin_open: true
     tty: true
 
+  redis:
+    image: redis:5.0.7
+    networks:
+      - helios-network
+
+  celeryworker:
+    <<: *app
+    container_name: helios-celeryworker
+    depends_on:
+      - redis
+      - db
+    ports: []
+    command: ["celery", "-A", "taskapp", "worker"]
+
 networks:
-  sherlock-network:
-    name: sherlock-network
+  helios-network:
+    name: helios-network

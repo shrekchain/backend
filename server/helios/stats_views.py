@@ -10,7 +10,7 @@ from django.db.models import Max, Count
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from helios import tasks
+from taskapp import tasks
 from helios_auth.security import get_user
 from helios_auth.view_utils import render_template
 from .models import CastVote, Election

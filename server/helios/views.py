@@ -49,7 +49,7 @@ from helios_auth.security import (
 )
 from . import datatypes
 from . import forms
-from . import tasks
+from taskapp import tasks
 from .crypto import algs, electionalgs, elgamal
 from .crypto import utils as cryptoutils
 from .security import (
