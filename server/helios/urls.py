@@ -32,5 +32,5 @@ urlpatterns = [
     url(r'^elections/administered$', views.elections_administered, name=names.ELECTIONS_ADMINISTERED),
     url(r'^elections/voted$', views.elections_voted, name=names.ELECTIONS_VOTED),
 
-    url(r'^elections/(?P<election_uuid>[^/]+)', include('helios.election_urls')),
+    url(r'^elections/(?P<election_uuid>[^/]+)/', include('helios.election_urls')),
 ]
