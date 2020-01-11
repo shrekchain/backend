@@ -16,13 +16,14 @@ import uuid
 import bleach
 import unicodecsv
 from django.conf import settings
+from django.contrib.postgres.fields import JSONField
 from django.db import models, transaction
 
 from helios import datatypes
 from helios import utils as heliosutils
 from helios.crypto import algs, utils
 from helios.datatypes.djangofield import LDObjectField
-from helios_auth.jsonfield import JSONField
+
 # useful stuff in helios_auth
 from helios_auth.models import User, AUTH_SYSTEMS
 
