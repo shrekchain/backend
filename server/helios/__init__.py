@@ -1,9 +1,6 @@
 from django.conf import settings
 
-from helios.celery_app import app as celery_app
-
 __all__ = (
-    "celery_app",
     "TEMPLATE_BASE",
     "ADMIN_ONLY",
     "VOTERS_UPLOAD",
