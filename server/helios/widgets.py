@@ -74,7 +74,7 @@ class SelectTimeWidget(Widget):
                     self.meridiem_val = 'a.m.'
         except AttributeError:
             hour_val = minute_val = 0
-            if isinstance(value, basestring):
+            if isinstance(value, str):
                 match = RE_TIME.match(value)
                 if match:
                     time_groups = match.groups()
