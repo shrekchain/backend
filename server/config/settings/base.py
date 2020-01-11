@@ -216,43 +216,6 @@ AUTH_ENABLED_AUTH_SYSTEMS = env("AUTH_ENABLED_AUTH_SYSTEMS", default="google").s
 )
 AUTH_DEFAULT_AUTH_SYSTEM = env("AUTH_DEFAULT_AUTH_SYSTEM", default=None)
 
-# google
-GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="")
-GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default="")
-
-# facebook
-FACEBOOK_APP_ID = env("FACEBOOK_APP_ID", default="")
-FACEBOOK_API_KEY = env("FACEBOOK_API_KEY", default="")
-FACEBOOK_API_SECRET = env("FACEBOOK_API_SECRET", default="")
-
-# twitter
-TWITTER_API_KEY = ""
-TWITTER_API_SECRET = ""
-TWITTER_USER_TO_FOLLOW = "heliosvoting"
-TWITTER_REASON_TO_FOLLOW = "we can direct-message you when the result has been computed in an election in which you participated"
-
-# the token for Helios to do direct messaging
-TWITTER_DM_TOKEN = {
-    "oauth_token": "",
-    "oauth_token_secret": "",
-    "user_id": "",
-    "screen_name": "",
-}
-
-# LinkedIn
-LINKEDIN_API_KEY = ""
-LINKEDIN_API_SECRET = ""
-
-# CAS (for universities)
-CAS_USERNAME = env("CAS_USERNAME", default="")
-CAS_PASSWORD = env("CAS_PASSWORD", default="")
-CAS_ELIGIBILITY_URL = env("CAS_ELIGIBILITY_URL", default="")
-CAS_ELIGIBILITY_REALM = env("CAS_ELIGIBILITY_REALM", default="")
-
-# Clever
-CLEVER_CLIENT_ID = env("CLEVER_CLIENT_ID", default="")
-CLEVER_CLIENT_SECRET = env("CLEVER_CLIENT_SECRET", default="")
-
 # email server
 EMAIL_HOST = env("EMAIL_HOST", default="localhost")
 EMAIL_PORT = int(env("EMAIL_PORT", default="2525"))
@@ -268,10 +231,15 @@ if env("EMAIL_USE_AWS", default="0") == "1":
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
 
-# set up django-celery
-# BROKER_BACKEND = "kombu.transport.DatabaseTransport"
 
-CELERY_BROKER_URL = "amqp://localhost"
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="django://")
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERYD_TASK_TIME_LIMIT = 5 * 60
+CELERYD_TASK_SOFT_TIME_LIMIT = 60
+
 CELERY_TASKS_ALWAYS_EAGER = True
 
 SECURE_HSTS_SECONDS = 31536000
