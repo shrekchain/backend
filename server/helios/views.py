@@ -748,7 +748,7 @@ def one_election_cast_confirm(request, election):
     if election.encrypted_tally or election.result:
         return render_template(request, "election_tallied", {"election": election})
 
-    encrypted_vote = request.session["encrypted_vote"]
+    encrypted_vote = request.session["encrypted_vote"].encode()
     vote_fingerprint = cryptoutils.hash_b64(encrypted_vote)
 
     # if this user is a voter, prepare some stuff
