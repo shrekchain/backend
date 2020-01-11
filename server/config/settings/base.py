@@ -95,7 +95,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "urls"
@@ -103,27 +103,21 @@ ROOT_URLCONF = "urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            str(APPS_DIR.path("templates")),
-            str(APPS_DIR),
-
-        ],
+        "DIRS": [str(APPS_DIR.path("templates")), str(APPS_DIR),],
         "OPTIONS": {
             "debug": DEBUG,
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
                 "django.template.loaders.app_directories.Loader",
             ],
-            'context_processors': [
-                'django.template.context_processors.request',
-            ]
-        }
+            "context_processors": ["django.template.context_processors.request",],
+        },
     },
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backend.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackends',
+    "django.contrib.auth.backend.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackends",
 ]
 
 
@@ -139,31 +133,25 @@ INSTALLED_APPS = (
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.github',
-
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.github",
     "helios_auth.apps.HeliosAuthConfig",
     "helios.apps.HeliosConfig",
     "server_ui.apps.ServerUiConfig",
 )
 
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': env('GOOGLE_CLIENT_ID', default=''),
-            'secret': env('GOOGLE_CLIENT_SECRET', default=''),
-            'key': '',
+    "google": {
+        "APP": {
+            "client_id": env("GOOGLE_CLIENT_ID", default=""),
+            "secret": env("GOOGLE_CLIENT_SECRET", default=""),
+            "key": "",
         }
     },
-    'github': {
-        'SCOPE': [
-            'user',
-        ]
-    }
+    "github": {"SCOPE": ["user",]},
 }
 
-INTERNAL_IPS = ['127.0.0.1']
+INTERNAL_IPS = ["127.0.0.1"]
 
 # tricks to have debug toolbar when developing with docker
 ip = socket.gethostbyname(socket.gethostname())

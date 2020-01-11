@@ -94,11 +94,15 @@ from django.conf import settings
 
 
 def get_election_url(election):
-    return settings.URL_HOST + reverse(url_names.ELECTION_SHORTCUT, args=[election.short_name])
+    return settings.URL_HOST + reverse(
+        url_names.ELECTION_SHORTCUT, args=[election.short_name]
+    )
 
 
 def get_election_badge_url(election):
-    return settings.URL_HOST + reverse(url_names.election.ELECTION_BADGE, args=[election.uuid])
+    return settings.URL_HOST + reverse(
+        url_names.election.ELECTION_BADGE, args=[election.uuid]
+    )
 
 
 def get_election_govote_url(election):
@@ -1929,6 +1933,7 @@ def one_election_view(request, election):
             "test_cookie_url": test_cookie_url,
         },
     )
+
 
 @election_view()
 @return_json

@@ -176,6 +176,6 @@ def can_create_election(user_id, user_info):
 
 
 urlpatterns = [
-  url(r'^password/login', password_login_view, name=PASSWORD_LOGIN_URL_NAME),
-  url(r'^password/forgot', password_forgotten_view, name=PASSWORD_FORGOTTEN_URL_NAME)
+    url(r"^password/login", password_login_view, name=PASSWORD_LOGIN_URL_NAME),
+    url(r"^password/forgot", password_forgotten_view, name=PASSWORD_FORGOTTEN_URL_NAME),
 ]
