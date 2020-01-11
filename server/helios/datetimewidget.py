@@ -7,7 +7,6 @@ DateTimeWidget using JSCal2 from http://www.dynarch.com/projects/calendar/
 django snippets 1629
 """
 
-from django.utils.encoding import force_unicode
 from django.conf import settings
 from django import forms
 import datetime, time
@@ -49,11 +48,11 @@ class DateTimeWidget(forms.widgets.TextInput):
         final_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
         if value != "":
             try:
-                final_attrs["value"] = force_unicode(value.strftime(self.dformat))
+                final_attrs["value"] = value.strftime(self.dformat)
             except:
-                final_attrs["value"] = force_unicode(value)
+                final_attrs["value"] = value
         if "id" not in final_attrs:
-            final_attrs["id"] = "%s_id" % (name)
+            final_attrs["id"] = "%s_id" % name
         id = final_attrs["id"]
 
         jsdformat = self.dformat  # .replace('%', '%%')
@@ -95,12 +94,10 @@ class DateTimeWidget(forms.widgets.TextInput):
             initial_value = initial
 
         try:
-            if force_unicode(initial_value.strftime(self.dformat)) != force_unicode(
-                data_value.strftime(self.dformat)
-            ):
+            if initial_value.strftime(self.dformat) != data_value.strftime(self.dformat):
                 return True
         except:
-            if force_unicode(initial_value) != force_unicode(data_value):
+            if initial_value != data_value:
                 return True
 
         return False

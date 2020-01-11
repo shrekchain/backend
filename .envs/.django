@@ -4,6 +4,7 @@ POSTGRES_PORT=5432
 DJANGO_SECRET_KEY=changeme
 DJANGO_SETTINGS_MODULE=config.settings.base
 DJANGO_SETTINGS_MODULE_TEST=config.settings.test
+
 ALLOWED_HOSTS=localhost,127.0.0.1,127-0-0-1.nip.io
 GOOGLE_CLIENT_ID=957234629219-btdr0i0u8cf1lrlo0nh0oc5jdm2oi089.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=kzIYSXHGSKb7ynUbky9E7UWT

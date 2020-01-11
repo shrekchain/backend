@@ -8,10 +8,8 @@ Ben Adida
 ben@adida.net
 """
 
-import math, hashlib, logging
-from . import randpool, number
-
-from . import numtheory
+import hashlib
+import logging
 
 from .algs import Utils
 

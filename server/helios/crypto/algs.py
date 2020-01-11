@@ -7,10 +7,12 @@ Ben Adida
 ben@adida.net
 """
 
-import math, hashlib, logging
+import hashlib
+import logging
+import math
+
 from . import randpool, number
 
-from . import numtheory
 
 # some utilities
 class Utils:

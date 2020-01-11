@@ -2,6 +2,7 @@
 Unit Tests for Auth Systems
 """
 
+import pytest
 import unittest
 
 from django.core import mail
@@ -14,6 +15,7 @@ from helios_auth.auth_systems import AUTH_SYSTEMS
 from django.urls import reverse
 
 
+@pytest.mark.django_db
 class UserModelTests(unittest.TestCase):
 
     def setUp(self):
