@@ -16,7 +16,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404
 
 import helios
-from helios.models import Voter, Trustee
+from helios.models import Voter, Trustee, Election
 from helios_auth.security import get_user
 
 

@@ -866,5 +866,5 @@ def EG_fiatshamir_challenge_generator(commitment):
 
 
 def DLog_challenge_generator(commitment):
-    string_to_hash = str(commitment)
+    string_to_hash = str(commitment).encode()
     return int(hashlib.sha1(string_to_hash).hexdigest(), 16)

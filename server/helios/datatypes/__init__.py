@@ -249,7 +249,7 @@ class LDObject(object):
     @property
     def hash(self):
         s = self.serialize()
-        return cryptoutils.hash_b64(s)
+        return cryptoutils.hash_b64(s.encode())
 
     def process_value_in(self, field_name, field_value):
         """
