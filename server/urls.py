@@ -17,3 +17,9 @@ urlpatterns = [
 
     url(r'^', include('server_ui.urls')),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
