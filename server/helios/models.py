@@ -14,7 +14,7 @@ import random
 import uuid
 
 import bleach
-import unicodecsv
+import csv
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models, transaction
@@ -798,7 +798,7 @@ class VoterFile(models.Model):
             voter_stream = open(self.voter_file.path, "rU")
 
         # reader = unicode_csv_reader(voter_stream)
-        reader = unicodecsv.reader(voter_stream, encoding="utf-8")
+        reader = csv.reader(voter_stream)
 
         for voter_fields in reader:
             # bad line
