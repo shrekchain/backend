@@ -577,7 +577,7 @@ def get_randomness(request, election):
   """
     return {
         # back to urandom, it's fine
-        "randomness": base64.b64encode(os.urandom(32))
+        "randomness": base64.b64encode(os.urandom(32)).decode()
         # "randomness" : base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes)
     }
 
