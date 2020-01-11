@@ -3,14 +3,14 @@ from .base import *  # noqa
 DEBUG = False
 
 TEMPLATES[0]["OPTIONS"]["debug"] = False
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": ":memory:",
-        "TEST_NAME": ":memory:"
-    }
-}
+#
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": ":memory:",
+#         "TEST_NAME": ":memory:"
+#     }
+# }
 
 CACHES = {
     "default": {
