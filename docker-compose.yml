@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   db:
@@ -27,9 +27,11 @@ services:
     volumes:
       - ./server:/app
     ports:
-    - 8000:8000
+      - 8000:8000
     networks:
       - sherlock-network
+    stdin_open: true
+    tty: true
 
 networks:
   sherlock-network:

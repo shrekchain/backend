@@ -19,7 +19,13 @@ from .auth_systems import AUTH_SYSTEMS
 from .auth_systems import password
 from .models import User
 from .security import FIELDS_TO_SAVE, get_user
-from .url_names import AUTH_START, AUTH_AFTER, AUTH_INDEX, AUTH_WHY, AUTH_AFTER_INTERVENTION
+from .url_names import (
+    AUTH_START,
+    AUTH_AFTER,
+    AUTH_INDEX,
+    AUTH_WHY,
+    AUTH_AFTER_INTERVENTION,
+)
 from .view_utils import render_template
 
 
