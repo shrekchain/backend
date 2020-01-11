@@ -15,7 +15,7 @@ def to_json(d):
 def from_json(json_str):
     if not json_str:
         return None
-    return json.loads(json_str)
+    return json.loads(json_str.decode())
 
 
 def JSONtoDict(json):

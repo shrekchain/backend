@@ -1121,7 +1121,7 @@ class CastVote(HeliosModel):
         """
     find a tiny version of the hash for a URL slug.
     """
-        safe_hash = self.vote_hash
+        safe_hash = self.vote_hash.decode()
         for c in ["/", "+"]:
             safe_hash = safe_hash.replace(c, "")
 
