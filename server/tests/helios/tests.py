@@ -147,27 +147,6 @@ class ElectionModelTests(TestCase):
         # try getting pretty eligibility, make sure it doesn't throw an exception
         assert self.user.user_type in self.election.pretty_eligibility
 
-    def test_facebook_eligibility(self):
-        self.election.eligibility = [{'auth_system': 'facebook', 'constraint':[{'group': {'id': '123', 'name':'Fake Group'}}]}]
-
-        # without openreg, this should be false
-        self.assertFalse(self.election.user_eligible_p(self.fb_user))
-
-        self.election.openreg = True
-
-        # fake out the facebook constraint checking, since
-        # our access_token is obviously wrong
-        from helios_auth.auth_systems import facebook
-
-        def fake_check_constraint(constraint, user):
-            return constraint == {'group': {'id': '123', 'name':'Fake Group'}} and user == self.fb_user
-        facebook.check_constraint = fake_check_constraint
-
-        self.assertTrue(self.election.user_eligible_p(self.fb_user))
-
-        # also check that eligibility_category_id does the right thing
-        self.assertEquals(self.election.eligibility_category_id('facebook'), '123')
-
     def test_freeze(self):
         # freezing without trustees and questions, no good
         def try_freeze():

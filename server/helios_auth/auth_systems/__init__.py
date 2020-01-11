@@ -1,18 +1,9 @@
-AUTH_SYSTEMS = {}
+from . import password, google
 
-from . import twitter, password, cas, facebook, google, linkedin, clever
-
-AUTH_SYSTEMS["twitter"] = twitter
-AUTH_SYSTEMS["linkedin"] = linkedin
-AUTH_SYSTEMS["password"] = password
-AUTH_SYSTEMS["cas"] = cas
-AUTH_SYSTEMS["facebook"] = facebook
-AUTH_SYSTEMS["google"] = google
-AUTH_SYSTEMS["clever"] = clever
-
-# not ready
-# import live
-# AUTH_SYSTEMS['live'] = live
+AUTH_SYSTEMS = {
+    'password': password,
+    'google': google
+}
 
 
 def can_check_constraint(auth_system):

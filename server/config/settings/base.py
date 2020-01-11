@@ -108,21 +108,54 @@ TEMPLATES = [
                 "django.template.loaders.filesystem.Loader",
                 "django.template.loaders.app_directories.Loader",
             ],
-        },
+            'context_processors': [
+                'django.template.context_processors.request',
+            ]
+        }
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backend.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackends',
+]
+
+
 INSTALLED_APPS = (
     "django.contrib.auth",
+    "django.contrib.messages",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.staticfiles",
     "corsheaders",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+
     "helios_auth.apps.HeliosAuthConfig",
     "helios.apps.HeliosConfig",
     "server_ui.apps.ServerUiConfig",
 )
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': env('GOOGLE_CLIENT_ID', default=''),
+            'secret': env('GOOGLE_CLIENT_SECRET', default=''),
+            'key': '',
+        }
+    },
+    'github': {
+        'SCOPE': [
+            'user',
+        ]
+    }
+}
+
 
 ##
 ## HELIOS
