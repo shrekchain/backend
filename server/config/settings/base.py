@@ -1,6 +1,7 @@
 import json
 import environ
 import logging
+import socket
 
 
 # now that setting are deep inside the file structure, we need to manually dig ourselves out
@@ -94,6 +95,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = "urls"
@@ -132,6 +134,7 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.staticfiles",
+    "debug_toolbar",
     "corsheaders",
     "allauth",
     "allauth.account",
@@ -160,6 +163,11 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+INTERNAL_IPS = ['127.0.0.1']
+
+# tricks to have debug toolbar when developing with docker
+ip = socket.gethostbyname(socket.gethostname())
+INTERNAL_IPS += [ip[:-1] + "1"]
 
 ##
 ## HELIOS
