@@ -8,11 +8,10 @@ from django.core import mail
 from django.db import IntegrityError, transaction
 from django.test import TestCase
 
-from . import models
-from .auth_systems import AUTH_SYSTEMS
+from helios_auth import models
+from helios_auth.auth_systems import AUTH_SYSTEMS
 
 from django.urls import reverse
-
 
 
 class UserModelTests(unittest.TestCase):

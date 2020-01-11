@@ -8,7 +8,7 @@ from django.conf.urls import url
 
 from . import url_names
 from . import views
-from settings import AUTH_ENABLED_AUTH_SYSTEMS
+from django.conf import settings
 
 urlpatterns = [
     #   basic static stuff
@@ -22,11 +22,11 @@ urlpatterns = [
 ]
 
 # password auth
-if 'password' in AUTH_ENABLED_AUTH_SYSTEMS:
+if 'password' in settings.AUTH_ENABLED_AUTH_SYSTEMS:
     from helios_auth.auth_systems.password import urlpatterns as password_patterns
     urlpatterns.extend(password_patterns)
 
 # twitter
-if 'twitter' in AUTH_ENABLED_AUTH_SYSTEMS:
+if 'twitter' in settings.AUTH_ENABLED_AUTH_SYSTEMS:
     from helios_auth.auth_systems.twitter import urlpatterns as twitter_patterns
     urlpatterns.extend(twitter_patterns)

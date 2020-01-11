@@ -8,12 +8,12 @@ urlpatterns = [
     url(r'^helios/', include('helios.urls')),
 
     # SHOULD BE REPLACED BY APACHE STATIC PATH
-    url(r'booth/(?P<path>.*)$', serve, {'document_root' : settings.ROOT_PATH + '/heliosbooth'}),
-    url(r'verifier/(?P<path>.*)$', serve, {'document_root' : settings.ROOT_PATH + '/heliosverifier'}),
+    url(r'booth/(?P<path>.*)$', serve, {'document_root': str(settings.APPS_DIR.path('heliosbooth'))}),
+    url(r'verifier/(?P<path>.*)$', serve, {'document_root': str(settings.APPS_DIR.path('/heliosverifier'))}),
 
-    url(r'static/auth/(?P<path>.*)$', serve, {'document_root' : settings.ROOT_PATH + '/helios_auth/media'}),
-    url(r'static/helios/(?P<path>.*)$', serve, {'document_root' : settings.ROOT_PATH + '/helios/media'}),
-    url(r'static/(?P<path>.*)$', serve, {'document_root' : settings.ROOT_PATH + '/server_ui/media'}),
+    url(r'static/auth/(?P<path>.*)$', serve, {'document_root': str(settings.APPS_DIR.path('/helios_auth/media'))}),
+    url(r'static/helios/(?P<path>.*)$', serve, {'document_root': str(settings.APPS_DIR.path('/helios/media'))}),
+    url(r'static/(?P<path>.*)$', serve, {'document_root': str(settings.APPS_DIR.path('/server_ui/media'))}),
 
     url(r'^', include('server_ui.urls')),
 ]
