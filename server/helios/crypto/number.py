@@ -47,11 +47,11 @@ def getRandomNumber(N, randfunc):
     """getRandomNumber(N:int, randfunc:callable):long
     Return an N-bit random number."""
 
-    S = randfunc(N / 8)
+    S = randfunc(N // 8)
     odd_bits = N % 8
     if odd_bits != 0:
         char = ord(randfunc(1)) >> (8 - odd_bits)
-        S = chr(char) + S
+        S = chr(char).encode() + S
     value = bytes_to_long(S)
     value |= 2 ** (N - 1)  # Ensure high bit is set
     assert size(value) >= N
