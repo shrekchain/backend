@@ -231,6 +231,9 @@ if env("EMAIL_USE_AWS", default="0") == "1":
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
 
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="")
+GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default="")
+
 
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="django://")
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
