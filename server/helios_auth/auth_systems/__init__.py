@@ -1,9 +1,6 @@
 from . import password, google
 
-AUTH_SYSTEMS = {
-    'password': password,
-    'google': google
-}
+AUTH_SYSTEMS = {"password": password, "google": google}
 
 
 def can_check_constraint(auth_system):

@@ -25,7 +25,7 @@ calbtn = """<img src="%smedia/admin/img/admin/icon_calendar.gif" alt="calendar" 
 
 
 class DateTimeWidget(forms.widgets.TextInput):
-    template_name = ''
+    template_name = ""
 
     class Media:
         css = {
@@ -94,7 +94,9 @@ class DateTimeWidget(forms.widgets.TextInput):
             initial_value = initial
 
         try:
-            if initial_value.strftime(self.dformat) != data_value.strftime(self.dformat):
+            if initial_value.strftime(self.dformat) != data_value.strftime(
+                self.dformat
+            ):
                 return True
         except:
             if initial_value != data_value:

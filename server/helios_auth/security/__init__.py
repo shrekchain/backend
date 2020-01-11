@@ -5,6 +5,7 @@ Ben Adida (ben@adida.net)
 """
 
 import uuid
+
 # nicely update the wrapper function
 from functools import update_wrapper
 

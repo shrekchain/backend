@@ -10,24 +10,30 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user_type', models.CharField(max_length=50)),
-                ('user_id', models.CharField(max_length=100)),
-                ('name', models.CharField(max_length=200, null=True)),
-                ('info', django.contrib.postgres.fields.jsonb.JSONField()),
-                ('token', django.contrib.postgres.fields.jsonb.JSONField(null=True)),
-                ('admin_p', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("user_type", models.CharField(max_length=50)),
+                ("user_id", models.CharField(max_length=100)),
+                ("name", models.CharField(max_length=200, null=True)),
+                ("info", django.contrib.postgres.fields.jsonb.JSONField()),
+                ("token", django.contrib.postgres.fields.jsonb.JSONField(null=True)),
+                ("admin_p", models.BooleanField(default=False)),
             ],
         ),
         migrations.AlterUniqueTogether(
-            name='user',
-            unique_together=set([('user_type', 'user_id')]),
+            name="user", unique_together=set([("user_type", "user_id")]),
         ),
     ]

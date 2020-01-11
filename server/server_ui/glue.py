@@ -34,4 +34,3 @@ def election_tallied(election, **kwargs):
 def glue():
     helios.signals.vote_cast.connect(vote_cast_send_message)
     helios.signals.election_tallied.connect(election_tallied)
-

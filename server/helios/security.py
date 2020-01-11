@@ -7,6 +7,7 @@ Ben Adida (ben@adida.net)
 import urllib.error
 import urllib.parse
 import urllib.request
+
 # nicely update the wrapper function
 from functools import update_wrapper
 

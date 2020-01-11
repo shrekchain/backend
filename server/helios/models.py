@@ -34,9 +34,8 @@ class HeliosModel(models.Model, datatypes.LDObjectContainer):
 
 
 class Election(HeliosModel):
-
     class Meta:
-        app_label = 'helios'
+        app_label = "helios"
 
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -632,6 +631,7 @@ class Election(HeliosModel):
     @property
     def url(self):
         import helios.views
+
         return helios.views.get_election_url(self)
 
     def init_tally(self):
@@ -732,7 +732,8 @@ class ElectionLog(models.Model):
     at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label = 'helios'
+        app_label = "helios"
+
 
 ##
 ## UTF8 craziness for CSV
@@ -777,7 +778,7 @@ class VoterFile(models.Model):
     num_voters = models.IntegerField(null=True)
 
     class Meta:
-        app_label = 'helios'
+        app_label = "helios"
 
     def itervoters(self):
         if self.voter_file_content:
@@ -898,7 +899,7 @@ class Voter(HeliosModel):
 
     class Meta:
         unique_together = ("election", "voter_login_id")
-        app_label = 'helios'
+        app_label = "helios"
 
     def __init__(self, *args, **kwargs):
         super(Voter, self).__init__(*args, **kwargs)
@@ -1098,7 +1099,7 @@ class CastVote(HeliosModel):
     cast_ip = models.GenericIPAddressField(null=True)
 
     class Meta:
-        app_label = 'helios'
+        app_label = "helios"
 
     @property
     def datatype(self):
@@ -1195,7 +1196,7 @@ class AuditedBallot(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        app_label = 'helios'
+        app_label = "helios"
 
     @classmethod
     def get(cls, election, vote_hash):
@@ -1246,7 +1247,7 @@ class Trustee(HeliosModel):
 
     class Meta:
         unique_together = ("election", "email")
-        app_label = 'helios'
+        app_label = "helios"
 
     def save(self, *args, **kwargs):
         """
