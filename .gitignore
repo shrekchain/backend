@@ -1,6 +1,7 @@
 **/*.pyc
 **/.pytest_cache
 .vscode/
+**/media/*
 
 shared/postgresql/pgdata
 !.gitkeep

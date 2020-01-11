@@ -2,6 +2,7 @@
 Unit Tests for Helios
 """
 
+import pytest
 import datetime
 import re
 import urllib
@@ -21,6 +22,7 @@ import helios.views as views
 from helios_auth import models as auth_models
 
 
+@pytest.mark.django_db
 class ElectionModelTests(TestCase):
     fixtures = ['users.json']
     allow_database_queries = True

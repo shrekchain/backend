@@ -172,7 +172,7 @@ class RandomPool:
         Return N bytes of random data.
         """
 
-        s = ""
+        s = b""
         i, pool = self._getPos, self._randpool
         h = self._hash()
         dsize = self._hash().digest_size
