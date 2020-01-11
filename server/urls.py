@@ -18,7 +18,7 @@ urlpatterns = [
         {"document_root": str(settings.APPS_DIR.path("/heliosverifier"))},
     ),
     url(
-        r"static/auth/(?P<path>.*)$",
+        r"static/(?P<path>.*)$",
         serve,
         {"document_root": str(settings.APPS_DIR.path("/helios_auth/media"))},
     ),

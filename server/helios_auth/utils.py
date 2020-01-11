@@ -12,10 +12,14 @@ def to_json(d):
     return json.dumps(d, sort_keys=True)
 
 
-def from_json(json_str):
-    if not json_str:
+def from_json(json_data):
+    if not json_data:
         return None
-    return json.loads(json_str.decode())
+    try:
+        json_str = json_data.decode()
+    except (UnicodeDecodeError, AttributeError):
+        json_str = json_data
+    return json.loads(json_str)
 
 
 def JSONtoDict(json):

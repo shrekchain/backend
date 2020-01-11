@@ -31,8 +31,8 @@ def prepare_vars(request, values):
         vars_with_user["csrf_token"] = request.session["csrf_token"]
         vars_with_user["SECURE_URL_HOST"] = settings.SECURE_URL_HOST
 
-    vars_with_user["STATIC"] = "/static/auth"
-    vars_with_user["MEDIA_URL"] = "/static/auth/"
+    vars_with_user["STATIC"] = "/static"
+    vars_with_user["MEDIA_URL"] = "/static/"
     vars_with_user["TEMPLATE_BASE"] = helios_auth.TEMPLATE_BASE
 
     vars_with_user["settings"] = settings

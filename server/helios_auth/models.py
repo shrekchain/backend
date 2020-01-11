@@ -174,7 +174,7 @@ class User(models.Model):
             name_display = self.pretty_name
 
         return (
-            """<img class="%s-logo" src="/static/auth/login-icons/%s.png" alt="%s" /> %s"""
+            """<img class="%s-logo" src="/static/login-icons/%s.png" alt="%s" /> %s"""
             % (size, self.user_type, self.user_type, name_display)
         )
 
