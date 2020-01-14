@@ -6,6 +6,7 @@ from django.views.static import serve
 urlpatterns = [
     url(r"^auth/", include("helios_auth.urls")),
     url(r"^helios/", include("helios.urls")),
+    url(r'^accounts/', include('allauth.urls')),
     # SHOULD BE REPLACED BY APACHE STATIC PATH
     url(
         r"booth/(?P<path>.*)$",
