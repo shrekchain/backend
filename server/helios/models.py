@@ -1300,4 +1300,3 @@ class QrCode(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     qrcode_file = models.ImageField(upload_to='qrcode')
     
-
