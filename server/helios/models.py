@@ -1294,3 +1294,10 @@ class Trustee(HeliosModel):
             self.public_key,
             algs.EG_fiatshamir_challenge_generator,
         )
+
+class QrCode(models.Model):
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    qrcode_file = models.ImageField(upload_to='qrcode')
+    
+
