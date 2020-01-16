@@ -3,6 +3,7 @@ Unit Tests for Helios
 """
 
 import re
+import uuid
 
 import django_webtest
 import pytest
@@ -87,13 +88,15 @@ class ElectionModelTests(TestCase):
         election = self.election
 
         with open("helios/fixtures/voter-file.csv") as file:
-            vf = models.VoterFile.objects.create(election=election, voter_file=File(file, "voter_file.css"))
+            vf = models.VoterFile.objects.create(
+                election=election, voter_file=File(file, "voter_file.css")
+            )
             vf.process()
 
         # make sure that we stripped things correctly
-        voter = election.voter_set.get(voter_login_id='benadida5')
-        assert voter.voter_email == 'ben5@adida.net'
-        assert voter.voter_name == 'Ben5 Adida'
+        voter = election.voter_set.get(voter_login_id="benadida5")
+        assert voter.voter_email == "ben5@adida.net"
+        assert voter.voter_name == "Ben5 Adida"
 
     def test_check_issues_before_freeze(self):
         # should be three issues: no trustees, and no questions, and no voters
@@ -141,15 +144,15 @@ class ElectionModelTests(TestCase):
         assert LOGS == list(reversed(pulled_logs))
 
     def test_eligibility(self):
-        self.election.eligibility = [{'auth_system': self.user.user_type}]
+        self.election.eligibility = [{"auth_system": self.user.user_type}]
 
         # without openreg, this should be false
         assert not self.election.user_eligible_p(self.user)
 
         # what about after saving?
         self.election.save()
-        e = models.Election.objects.get(uuid = self.election.uuid)
-        assert e.eligibility == [{'auth_system': self.user.user_type}]
+        e = models.Election.objects.get(uuid=self.election.uuid)
+        assert e.eligibility == [{"auth_system": self.user.user_type}]
 
         self.election.openreg = True
 
@@ -173,47 +176,44 @@ class ElectionModelTests(TestCase):
         self.election.freeze()
 
         # make sure it logged something
-    #     self.assertTrue(len(self.election.get_log().all()) > 0)
-    #
-    # def test_archive(self):
-    #     self.election.archived_at = datetime.datetime.utcnow()
-    #     self.assertTrue(self.election.is_archived)
-    #
-    #     self.election.archived_at = None
-    #     self.assertFalse(self.election.is_archived)
-    #
-    # def test_voter_registration(self):
-    #     # before adding a voter
-    #     voters = models.Voter.get_by_election(self.election)
-    #     self.assertEquals(0, len(voters))
-    #
-    #     # make sure no voter yet
-    #     voter = models.Voter.get_by_election_and_user(self.election, self.user)
-    #     self.assertIsNone(voter)
-    #
-    #     # make sure no voter at all across all elections
-    #     voters = models.Voter.get_by_user(self.user)
-    #     self.assertEquals(0, len(voters))
-    #
-    #     # register the voter
-    #     voter = models.Voter.register_user_in_election(self.user, self.election)
-    #
-    #     # make sure voter is there now
-    #     voter_2 = models.Voter.get_by_election_and_user(self.election, self.user)
-    #
-    #     self.assertIsNotNone(voter)
-    #     self.assertIsNotNone(voter_2)
-    #     self.assertEquals(voter, voter_2)
-    #
-    #     # make sure voter is there in this call too
-    #     voters = models.Voter.get_by_user(self.user)
-    #     self.assertEquals(1, len(voters))
-    #     self.assertEquals(voter, voters[0])
-    #
-    #     voter_2 = models.Voter.get_by_election_and_uuid(self.election, voter.uuid)
-    #     self.assertEquals(voter, voter_2)
-    #
-    #     self.assertEquals(voter.user, self.user)
+        assert self.election.get_log().exists()
+
+    def test_archive(self):
+        self.election.archived_at = now()
+        assert self.election.is_archived
+
+        self.election.archived_at = None
+        assert not self.election.is_archived
+
+    def test_voter_registration(self):
+        # before adding a voter
+        voters = models.Voter.get_by_election(self.election)
+        assert not voters
+
+        # make sure no voter yet
+        voter = models.Voter.get_by_election_and_user(self.election, self.user)
+        assert voter is None
+
+        # make sure no voter at all across all elections
+        voters = models.Voter.get_by_user(self.user)
+        assert not voters
+
+        # register the voter
+        voter = models.Voter.register_user_in_election(self.user, self.election)
+
+        # make sure voter is there now
+        voter_2 = models.Voter.get_by_election_and_user(self.election, self.user)
+        assert voter
+        assert voter_2
+        assert voter == voter_2
+
+        # make sure voter is there in this call too
+        voters = models.Voter.get_by_user(self.user)
+        assert list(voters) == [voter]
+
+        voter_2 = models.Voter.get_by_election_and_uuid(self.election, voter.uuid)
+        assert voter == voter_2
+        assert voter.user == self.user
 
 
 class VoterModelTests(TestCase):
@@ -223,22 +223,26 @@ class VoterModelTests(TestCase):
     def setUp(self):
         self.election = models.Election.objects.get(short_name="test")
 
-    #
-    # def test_create_password_voter(self):
-    #     v = models.Voter(uuid = str(uuid.uuid1()), election = self.election, voter_login_id = 'voter_test_1', voter_name = 'Voter Test 1', voter_email='foobar@acme.com')
-    #
-    #     v.generate_password()
-    #
-    #     v.save()
-    #
-    #     # password has been generated!
-    #     self.assertFalse(v.voter_password == None)
-    #
-    #     # can't generate passwords twice
-    #     self.assertRaises(Exception, lambda: v.generate_password())
-    #
-    #     # check that you can get at the voter user structure
-    #     self.assertEquals(v.get_user().user_id, v.voter_email)
+    def test_create_password_voter(self):
+        v = models.Voter(
+            uuid=str(uuid.uuid1()),
+            election=self.election,
+            voter_login_id="voter_test_1",
+            voter_name="Voter Test 1",
+            voter_email="foobar@acme.com",
+        )
+        v.generate_password()
+        v.save()
+
+        # password has been generated!
+        assert v.voter_password is not None
+
+        # can't generate passwords twice
+        with pytest.raises(Exception):
+            v.generate_password()
+
+        # check that you can get at the voter user structure
+        assert v.get_user().user_id == v.voter_email
 
 
 class CastVoteModelTests(TestCase):
@@ -266,24 +270,27 @@ class DatatypeTests(TestCase):
         self.election = models.Election.objects.all()[0]
         self.election.generate_trustee(views.ELGAMAL_PARAMS)
 
-    # def test_instantiate(self):
-    #     ld_obj = datatypes.LDObject.instantiate(self.election.get_helios_trustee(), '2011/01/Trustee')
-    #     foo = ld_obj.serialize()
-    #
-    # def test_from_dict(self):
-    #     ld_obj = datatypes.LDObject.fromDict({
-    #             'y' : '1234',
-    #             'p' : '23434',
-    #             'g' : '2343243242',
-    #             'q' : '2343242343434'}, type_hint = 'pkc/elgamal/PublicKey')
-    #
-    # def test_dictobject_from_dict(self):
-    #     original_dict = {
-    #         'A' : '35423432',
-    #         'B' : '234324243'}
-    #     ld_obj = datatypes.LDObject.fromDict(original_dict, type_hint = 'legacy/EGZKProofCommitment')
-    #
-    #     self.assertEquals(original_dict, ld_obj.toDict())
+    def test_instantiate(self):
+        ld_obj = datatypes.LDObject.instantiate(
+            self.election.get_helios_trustee(), "2011/01/Trustee"
+        )
+        foo = ld_obj.serialize()
+
+    @staticmethod
+    def test_from_dict():
+        ld_obj = datatypes.LDObject.fromDict(
+            {"y": "1234", "p": "23434", "g": "2343243242", "q": "2343242343434"},
+            type_hint="pkc/elgamal/PublicKey",
+        )
+
+    @staticmethod
+    def test_dictobject_from_dict():
+        original_dict = {"A": "35423432", "B": "234324243"}
+        ld_obj = datatypes.LDObject.fromDict(
+            original_dict, type_hint="legacy/EGZKProofCommitment"
+        )
+
+        assert original_dict == ld_obj.toDict()
 
 
 ##
@@ -291,20 +298,20 @@ class DatatypeTests(TestCase):
 ##
 
 
-class DataFormatBlackboxTests(object):
+class DataFormatBlackboxTests(TestCase):
     def setUp(self):
         self.election = models.Election.objects.all()[0]
 
     def assertEqualsToFile(self, response, file_path):
         expected = open(file_path)
-        self.assertEquals(response.content, expected.read())
+        assert response.content == expected.read()
         expected.close()
 
     #
     # def test_election(self):
     #     response = self.client.get("/helios/elections/%s" % self.election.uuid, follow=False)
-    #     self.assertEqualsToFile(response, self.EXPECTED_ELECTION_FILE)
-    #
+    #     self.assertEqualsToFile(response, self.election)
+
     # def test_election_metadata(self):
     #     response = self.client.get("/helios/elections/%s/meta" % self.election.uuid, follow=False)
     #     self.assertEqualsToFile(response, self.EXPECTED_ELECTION_METADATA_FILE)
@@ -417,26 +424,28 @@ class ElectionBlackboxTests(WebTest):
         del session["user"]
         session.save()
 
-    # def test_election_params(self):
-    #     response = self.client.get("/helios/elections/params")
-    #     self.assertEquals(response.content, views.ELGAMAL_PARAMS_LD_OBJECT.serialize())
-    #
+    def test_election_params(self):
+        response = self.client.get("/helios/elections/params")
+        self.assertEquals(response.content.decode(), views.ELGAMAL_PARAMS_LD_OBJECT.serialize())
+
+    # returns 301 for some reason and then 404
     # def test_election_404(self):
     #     response = self.client.get("/helios/elections/foobar")
     #     self.assertStatusCode(response, 404)
-    #
-    # def test_election_bad_trustee(self):
-    #     response = self.client.get("/helios/t/%s/foobar@bar.com/badsecret" % self.election.short_name)
-    #     self.assertStatusCode(response, 404)
-    #
-    # def test_get_election_shortcut(self):
-    #     response = self.client.get("/helios/e/%s" % self.election.short_name, follow=True)
-    #     self.assertContains(response, self.election.description)
-    #
+
+    def test_election_bad_trustee(self):
+        response = self.client.get("/helios/t/%s/foobar@bar.com/badsecret" % self.election.short_name)
+        assert response.status_code == 404
+
+    def test_get_election_shortcut(self):
+        response = self.client.get("/helios/e/%s" % self.election.short_name, follow=True)
+        assert self.election.description in response.content.decode()
+
+    # also redirection problem
     # def test_get_election_raw(self):
     #     response = self.client.get("/helios/elections/%s" % self.election.uuid, follow=False)
-    #     self.assertEquals(response.content, self.election.toJSON())
-    #
+    #     assert self.election.toJSON() in response.content.decode()
+
     # def test_get_election(self):
     #     response = self.client.get("/helios/elections/%s/view" % self.election.uuid, follow=False)
     #     self.assertContains(response, self.election.description)
