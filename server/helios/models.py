@@ -12,7 +12,6 @@ import datetime
 import io
 import random
 import uuid
-import base64
 
 import bleach
 import csv
@@ -924,19 +923,14 @@ class Voter(HeliosModel):
             voter.alias = "V%s" % alias_num
 
         voter.save()
+        # TODO: fix with proper data
         qr_code_content = "content"
-        qr_code_image = heliosutils.create_qr_code(qr_code_content)
+        qr_code_base64 = heliosutils.create_qr_code_in_base64(qr_code_content)
 
-        byteIO = io.BytesIO()
-        qr_code_image.save(byteIO, format='PNG')
-        image_str = base64.b64encode(byteIO.getvalue())
-
-        qr_code = QrCode(
+        QrCode.objects.create(
             voter=voter,
-            image_base64=image_str
+            image_base64=qr_code_base64
         )
-        qr_code.save()
-
         return voter
 
     @classmethod

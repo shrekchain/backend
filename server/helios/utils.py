@@ -19,10 +19,11 @@ from helios_auth.utils import *
 
 from django.conf import settings
 
+import io
+import base64
 import random
 import qrcode
 import logging
-
 
 def split_by_length(str, length, rejoin_with=None):
     """
@@ -216,6 +217,12 @@ def lock_row(model, pk):
 
     return row
 
+
+def create_qr_code_in_base64(data):
+    qr_code_image = create_qr_code_in_base64(data)
+    byteIO = io.BytesIO()
+    qr_code_image.save(byteIO, format='PNG')
+    return base64.b64encode(byteIO.getvalue())
 
 def create_qr_code(data) -> PIL.Image:
 
