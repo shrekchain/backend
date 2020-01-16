@@ -12,6 +12,7 @@ import datetime
 import io
 import random
 import uuid
+import base64
 
 import bleach
 import csv
@@ -915,13 +916,6 @@ class Voter(HeliosModel):
     def register_user_in_election(cls, user, election):
         voter_uuid = str(uuid.uuid4())
         voter = Voter(uuid=voter_uuid, user=user, election=election)
-
-        qr_code_content = "content"
-        qr_code = QrCode(
-            voter_id=voter_uuid, 
-            qr_code_image=heliosutils.create_qr_code(qr_code_content)
-        )
-        qr_code.save()
         
         # do we need to generate an alias?
         if election.use_voter_aliases:
@@ -930,6 +924,19 @@ class Voter(HeliosModel):
             voter.alias = "V%s" % alias_num
 
         voter.save()
+        qr_code_content = "content"
+        qr_code_image = heliosutils.create_qr_code(qr_code_content)
+
+        byteIO = io.BytesIO()
+        qr_code_image.save(byteIO, format='PNG')
+        image_str = base64.b64encode(byteIO.getvalue())
+
+        qr_code = QrCode(
+            voter=voter,
+            image_base64=image_str
+        )
+        qr_code.save()
+
         return voter
 
     @classmethod
@@ -1303,7 +1310,7 @@ class Trustee(HeliosModel):
         )
 
 class QrCode(models.Model):
-    voter_id = models.OneToOneField(Voter, on_delete=models.CASCADE)
+    voter = models.OneToOneField(Voter, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    qr_code_image = models.ImageField(upload_to='qrcode')
+    image_base64 = models.TextField()
     

@@ -20,6 +20,7 @@ from helios_auth.utils import *
 from django.conf import settings
 
 import random
+import qrcode
 import logging
 
 
