@@ -219,7 +219,7 @@ def lock_row(model, pk):
 
 
 def create_qr_code_in_base64(data):
-    qr_code_image = create_qr_code_in_base64(data)
+    qr_code_image = create_qr_code(data)
     byteIO = io.BytesIO()
     qr_code_image.save(byteIO, format='PNG')
     return base64.b64encode(byteIO.getvalue())
