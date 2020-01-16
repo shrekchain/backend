@@ -916,6 +916,13 @@ class Voter(HeliosModel):
         voter_uuid = str(uuid.uuid4())
         voter = Voter(uuid=voter_uuid, user=user, election=election)
 
+        qr_code_content = "content"
+        qr_code = QrCode(
+            voter_id=voter_uuid, 
+            qr_code_image=heliosutils.create_qr_code(qr_code_content)
+        )
+        qr_code.save()
+        
         # do we need to generate an alias?
         if election.use_voter_aliases:
             heliosutils.lock_row(Election, election.id)
@@ -1296,7 +1303,7 @@ class Trustee(HeliosModel):
         )
 
 class QrCode(models.Model):
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    voter_id = models.OneToOneField(Voter, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    qrcode_file = models.ImageField(upload_to='qrcode')
+    qr_code_image = models.ImageField(upload_to='qrcode')
     
