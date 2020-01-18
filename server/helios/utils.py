@@ -225,7 +225,6 @@ def create_qr_code_in_base64(data):
     return base64.b64encode(byteIO.getvalue())
 
 def create_qr_code(data) -> PIL.Image:
-
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -234,5 +233,4 @@ def create_qr_code(data) -> PIL.Image:
     )
     qr.add_data(data)
     qr.make(fit=True)
-
     return qr.make_image(fill_color="black", back_color="white")
