@@ -5,15 +5,25 @@ Ben Adida - ben@adida.net
 2005-04-11
 """
 
-import urllib.request, urllib.parse, urllib.error, re, datetime, string
+from django.core import mail as django_mail
+import urllib.request
+import urllib.parse
+import urllib.error
+import re
+import datetime
+import string
+import PIL
 
 # utils from helios_auth, too
 from helios_auth.utils import *
 
 from django.conf import settings
 
-import random, logging
-
+import io
+import base64
+import random
+import qrcode
+import logging
 
 def split_by_length(str, length, rejoin_with=None):
     """
@@ -22,7 +32,7 @@ def split_by_length(str, length, rejoin_with=None):
     str_arr = []
     counter = 0
     while counter < len(str):
-        str_arr.append(str[counter : counter + length])
+        str_arr.append(str[counter: counter + length])
         counter += length
 
     if rejoin_with:
@@ -66,7 +76,7 @@ def dictToURLParams(d):
 
 
 ##
-## XML escaping and unescaping
+# XML escaping and unescaping
 ##
 
 
@@ -80,7 +90,7 @@ def xml_unescape(s):
 
 
 ##
-## XSS attack prevention
+# XSS attack prevention
 ##
 
 
@@ -143,7 +153,7 @@ def get_prefix():
 
 
 ##
-## Datetime utilities
+# Datetime utilities
 ##
 
 
@@ -155,10 +165,8 @@ def string_to_datetime(str, fmt="%Y-%m-%d %H:%M"):
 
 
 ##
-## email
+# email
 ##
-
-from django.core import mail as django_mail
 
 
 def send_email(sender, recpt_lst, subject, body):
@@ -169,7 +177,7 @@ def send_email(sender, recpt_lst, subject, body):
 
 
 ##
-## raw SQL and locking
+# raw SQL and locking
 ##
 
 
@@ -196,7 +204,8 @@ def lock_row(model, pk):
     cursor = connection.cursor()
 
     cursor.execute(
-        "select * from " + model._meta.db_table + " where id = %s for update", [pk]
+        "select * from " + model._meta.db_table +
+        " where id = %s for update", [pk]
     )
     row = cursor.fetchone()
 
@@ -207,3 +216,21 @@ def lock_row(model, pk):
         pass
 
     return row
+
+
+def create_qr_code_in_base64(data):
+    qr_code_image = create_qr_code(data)
+    byteIO = io.BytesIO()
+    qr_code_image.save(byteIO, format='PNG')
+    return base64.b64encode(byteIO.getvalue())
+
+def create_qr_code(data) -> PIL.Image:
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+    return qr.make_image(fill_color="black", back_color="white")

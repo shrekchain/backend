@@ -915,7 +915,7 @@ class Voter(HeliosModel):
     def register_user_in_election(cls, user, election):
         voter_uuid = str(uuid.uuid4())
         voter = Voter(uuid=voter_uuid, user=user, election=election)
-
+        
         # do we need to generate an alias?
         if election.use_voter_aliases:
             heliosutils.lock_row(Election, election.id)
@@ -923,6 +923,14 @@ class Voter(HeliosModel):
             voter.alias = "V%s" % alias_num
 
         voter.save()
+        # TODO: fix with proper data
+        qr_code_content = "content"
+        qr_code_base64 = heliosutils.create_qr_code_in_base64(qr_code_content)
+
+        QrCode.objects.create(
+            voter=voter,
+            image_base64=qr_code_base64
+        )
         return voter
 
     @classmethod
@@ -1294,3 +1302,9 @@ class Trustee(HeliosModel):
             self.public_key,
             algs.EG_fiatshamir_challenge_generator,
         )
+
+class QrCode(models.Model):
+    voter = models.OneToOneField(Voter, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    image_base64 = models.TextField()
+    
